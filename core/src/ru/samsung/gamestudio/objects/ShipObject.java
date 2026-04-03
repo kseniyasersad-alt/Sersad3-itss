@@ -8,8 +8,8 @@ import ru.samsung.gamestudio.GameSettings;
 
 public class ShipObject extends GameObject {
 
-    public ShipObject(int texturePath, int x, int y, int width, String height, World world) {
-        super(texturePath, x, y, width, height, world);
+    public ShipObject(int x, int y, int width,int height,  String texturePath, World world) {
+        super(x, y, width, height,texturePath, world);
     }
 
 

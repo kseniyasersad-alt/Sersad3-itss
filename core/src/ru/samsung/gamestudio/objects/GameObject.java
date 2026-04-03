@@ -17,7 +17,7 @@ public class GameObject {
     public Body body;
     Texture texture;
 
-    GameObject(int texturePath, int x, int y, int width, String height, World world) {
+    GameObject( int x, int y, int width, int height,String texturePath, World world) {
         this.width = width;
         this.height = height;
 

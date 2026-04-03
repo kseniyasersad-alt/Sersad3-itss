@@ -1,6 +1,7 @@
 package ru.samsung.gamestudio;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,7 +15,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import static ru.samsung.gamestudio.GameSettings.*;
 
-public class MyGdxGame extends ApplicationAdapter {
+public class MyGdxGame extends Game {
 
     public World world;
 
@@ -37,6 +38,7 @@ public class MyGdxGame extends ApplicationAdapter {
         camera.setToOrtho(false, GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT);
 
         gameScreen = new GameScreen(this);
+        setScreen(gameScreen);
     }
 
     @Override
