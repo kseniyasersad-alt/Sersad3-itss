@@ -12,7 +12,6 @@ public class GameSession {
         nextTrashSpawnTime = sessionStartTime + (long) (GameSettings.STARTING_TRASH_APPEARANCE_COOL_DOWN
                 * getTrashPeriodCoolDown());
     }
-
     public boolean shouldSpawnTrash() {
         if (nextTrashSpawnTime <= TimeUtils.millis()) {
             nextTrashSpawnTime = TimeUtils.millis() + (long) (GameSettings.STARTING_TRASH_APPEARANCE_COOL_DOWN
@@ -21,7 +20,6 @@ public class GameSession {
         }
         return false;
     }
-
     private float getTrashPeriodCoolDown() {
         return (float) Math.exp(-0.001 * (TimeUtils.millis() - sessionStartTime) / 1000);
     }

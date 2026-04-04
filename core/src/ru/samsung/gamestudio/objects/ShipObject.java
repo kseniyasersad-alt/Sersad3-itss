@@ -4,10 +4,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.TimeUtils;
 import ru.samsung.gamestudio.GameSettings;
 
 public class ShipObject extends GameObject {
-
+    long lastShotTime;
     public ShipObject(int x, int y, int width,int height,  String texturePath, World world) {
         super(x, y, width, height,texturePath, world);
     }
@@ -35,10 +36,17 @@ public class ShipObject extends GameObject {
             setX(0);
         }
     }
-
     @Override
     public void draw(SpriteBatch batch) {
         putInFrame();
         super.draw(batch);
     }
+    public boolean needToShoot() {
+        if (TimeUtils.millis() - lastShotTime >= GameSettings.SHOOTING_COOL_DOWN) {
+            lastShotTime = TimeUtils.millis();
+            return true;
+        }
+        return false;
+    }
+
 }
