@@ -8,11 +8,15 @@ import com.badlogic.gdx.utils.TimeUtils;
 import ru.samsung.gamestudio.GameSettings;
 
 public class ShipObject extends GameObject {
-    long lastShotTime;
-    public ShipObject(int x, int y, int width,int height,  String texturePath, World world) {
-        super(x, y, width, height,texturePath, world);
-    }
 
+    long lastShotTime;
+    int livesLeft;
+
+    public ShipObject(int x, int y, int width,int height, String texturePath, World world) {
+        super(x, y, width, height, GameSettings.SHIP_BIT,texturePath, world);
+        body.setLinearDamping(10);
+        livesLeft = 3;
+    }
 
     public void move(Vector3 vector3) {
         body.applyForceToCenter(new Vector2(
@@ -20,6 +24,14 @@ public class ShipObject extends GameObject {
                         (vector3.y - getY()) * GameSettings.SHIP_FORCE_RATIO),
                 true
         );
+    }
+    @Override
+    public void hit() {
+        livesLeft -= 1;
+    }
+
+    public boolean isAlive() {
+        return livesLeft > 0;
     }
 
     private void putInFrame() {

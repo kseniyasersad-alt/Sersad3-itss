@@ -12,11 +12,16 @@ public class GameSettings {
     public static final int VELOCITY_ITERATIONS = 6;
     public static final int POSITION_ITERATIONS = 6;
     public static final float SCALE = 0.05f;
+
     public static int BULLET_VELOCITY = 200;
     public static float SHIP_FORCE_RATIO = 10;
     public static float TRASH_VELOCITY = 20;
     public static long STARTING_TRASH_APPEARANCE_COOL_DOWN = 2000;
     public static int SHOOTING_COOL_DOWN = 1000; // in [ms] - millisecond
+
+    public static final short TRASH_BIT = 1;
+    public static final short SHIP_BIT = 2;
+    public static final short BULLET_BIT = 4;
 
     // Object sizes
 
