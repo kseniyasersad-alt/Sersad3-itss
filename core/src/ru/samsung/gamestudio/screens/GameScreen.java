@@ -77,6 +77,7 @@ public class GameScreen extends ScreenAdapter {
                     GameResources.BULLET_IMG_PATH,
                     myGdxGame.world
             );
+
             bulletArray.add(laserBullet);
         }
 

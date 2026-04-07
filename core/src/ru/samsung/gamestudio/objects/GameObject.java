@@ -69,6 +69,7 @@ public class GameObject {
         circleShape.dispose();
 
         body.setTransform(x * SCALE, y * SCALE, 0);
+
         return body;
     }
 

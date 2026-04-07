@@ -1,6 +1,7 @@
 package ru.samsung.gamestudio;
 
 public class GameSettings {
+
     // Device settings
 
     public static final int SCREEN_WIDTH = 1280;

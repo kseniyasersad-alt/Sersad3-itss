@@ -8,6 +8,7 @@ public class ContactManager {
     World world;
 
     public ContactManager(World world) {
+
         this.world = world;
 
         world.setContactListener(new ContactListener() {
