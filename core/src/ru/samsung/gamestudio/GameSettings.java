@@ -2,12 +2,12 @@ package ru.samsung.gamestudio;
 
 public class GameSettings {
 
-    // Device settings
+    // device settings
 
-    public static final int SCREEN_WIDTH = 1280;
-    public static final int SCREEN_HEIGHT = 720;
+    public static final int SCREEN_WIDTH = 720;
+    public static final int SCREEN_HEIGHT = 1280;
 
-    // Physics settings
+    // physics settings
 
     public static final float STEP_TIME = 1f / 60f;
     public static final int VELOCITY_ITERATIONS = 6;
@@ -24,7 +24,7 @@ public class GameSettings {
     public static final short SHIP_BIT = 2;
     public static final short BULLET_BIT = 4;
 
-    // Object sizes
+    // object sizes
 
     public static final int SHIP_WIDTH = 150;
     public static final int SHIP_HEIGHT = 150;

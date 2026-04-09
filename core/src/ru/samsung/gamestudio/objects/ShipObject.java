@@ -18,6 +18,10 @@ public class ShipObject extends GameObject {
         livesLeft = 3;
     }
 
+    public int getLiveLeft() {
+        return livesLeft;
+    }
+
     public void move(Vector3 vector3) {
         body.applyForceToCenter(new Vector2(
                         (vector3.x - getX()) * GameSettings.SHIP_FORCE_RATIO,
