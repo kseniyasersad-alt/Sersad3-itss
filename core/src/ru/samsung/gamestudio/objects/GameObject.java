@@ -13,7 +13,6 @@ public class GameObject {
     public short cBits;
     public Body body;
     Texture texture;
-    Fixture fixture;
 
     GameObject( int x, int y, int width, int height, short cBits, String texturePath, World world) {
         this.width = width;
@@ -53,7 +52,6 @@ public class GameObject {
         def.type = BodyDef.BodyType.DynamicBody;
         def.fixedRotation = true;
         Body body = world.createBody(def);
-        fixture.setUserData(this);
 
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(Math.max(width, height) * SCALE / 2f);

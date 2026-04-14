@@ -8,10 +8,15 @@ public class GameResources {
 
     public static final String BLACKOUT_TOP_IMG_PATH = "textures/blackout_top.png";
 
+    public static final String BUTTON_LONG_BG_IMG_PATH = "textures/button_background_long.png";
+
     public static final String LIVE_IMG_PATH = "textures/life.png";
 
     public static final String BULLET_IMG_PATH = "textures/bullet.png";
     public static final String SHIP_IMG_PATH = "textures/ship.png";
     public static final String TRASH_IMG_PATH = "textures/trash.png";
 
+    // Fonts for text
+
+    public static final String FONT_PATH = "fonts/Montserrat-Bold.ttf";
 }
