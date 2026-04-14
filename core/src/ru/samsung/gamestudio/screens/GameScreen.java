@@ -113,7 +113,6 @@ public class GameScreen extends ScreenAdapter {
             switch (gameSession.state) {
                 case PLAYING:
                     if (pauseButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
-                        gameSession.pauseGame();
                     }
                     shipObject.move(myGdxGame.touch);
                     break;
