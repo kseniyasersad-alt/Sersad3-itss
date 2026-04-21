@@ -28,9 +28,21 @@ public class GameSettings {
 
     public static final int SHIP_WIDTH = 150;
     public static final int SHIP_HEIGHT = 150;
-    public static final int TRASH_WIDTH = 140;
+    public static final int TRASH_WIDTH = 120;
     public static final int TRASH_HEIGHT = 100;
     public static final int BULLET_WIDTH = 15;
     public static final int BULLET_HEIGHT = 45;
 
 }
+
+
+
+
+
+//     /\   /\           ___
+//    //\\_//\\       --|>_<|
+//   =|  0 - 0 |=  / \  \___/
+//     \ \ >\ \   /  /
+//     /\> > >/| /  /
+//   _/  |  |  |/  /
+//  |_|__=|__-|=\ /

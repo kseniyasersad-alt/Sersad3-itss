@@ -42,6 +42,9 @@ public class GameScreen extends ScreenAdapter {
     ButtonView homeButton;
     ButtonView continueButton;
 
+    TextView recordsTextView;
+
+    ButtonView homeButton2;
 
     public GameScreen(MyGdxGame myGdxGame) {
         this.myGdxGame = myGdxGame;
@@ -57,7 +60,7 @@ public class GameScreen extends ScreenAdapter {
         backgroundView = new MovingBackgroundView(GameResources.BACKGROUND_IMG_PATH);
         topBlackoutView = new ImageView(0, 1180, GameResources.BLACKOUT_TOP_IMG_PATH);
         liveView = new LiveView(305, 1215);
-        scoreTextView = new TextView(myGdxGame.commonWhiteFont, 50, 1215);
+        scoreTextView = new TextView(myGdxGame.commonWhiteFont, 50, 1219);
         pauseButton = new ButtonView(630, 1200, 46, 54, myGdxGame.commonWhiteFont, GameResources.PAUSE_IMG_PATH, " ");
 
         fullBlackoutView = new ImageView(0, 0, GameResources.BLACKOUT_FULL_IMG_PATH);
@@ -73,7 +76,6 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-
         handleInput();
 
         if (gameSession.state == GameState.PLAYING) {
@@ -156,6 +158,10 @@ public class GameScreen extends ScreenAdapter {
             pauseTextView.draw(myGdxGame.batch);
             homeButton.draw(myGdxGame.batch);
             continueButton.draw(myGdxGame.batch);
+        } else if (gameSession.state == GameState.ENDED) {
+            fullBlackoutView.draw(myGdxGame.batch);
+            recordsTextView.draw(myGdxGame.batch);
+            homeButton2.draw(myGdxGame.batch);
         }
 
         myGdxGame.batch.end();
@@ -166,9 +172,9 @@ public class GameScreen extends ScreenAdapter {
             boolean hasToBeDestroyed = !trashArray.get(i).isAlive() || !trashArray.get(i).isInFrame();
 
             if (!trashArray.get(i).isAlive()) {
+                gameSession.destructionRegistration();
                 if (myGdxGame.audioManager.isSoundOn) myGdxGame.audioManager.explosionSound.play(0.2f);
             }
-
             if (hasToBeDestroyed) {
                 myGdxGame.world.destroyBody(trashArray.get(i).body);
                 trashArray.remove(i--);
@@ -205,3 +211,11 @@ public class GameScreen extends ScreenAdapter {
     }
 
 }
+
+//     /\   /\           ___
+//    //\\_//\\       --|>_<|
+//   =|  0 - 0 |=  / \  \___/
+//     \ \ >\ \   /  /
+//     /\> > >/| /  /
+//   _/  |  |  |/  /
+//  |_|__=|__-|=\ /

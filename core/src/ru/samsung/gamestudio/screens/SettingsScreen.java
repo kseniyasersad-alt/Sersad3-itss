@@ -11,6 +11,7 @@ import ru.samsung.gamestudio.components.ButtonView;
 import ru.samsung.gamestudio.components.ImageView;
 import ru.samsung.gamestudio.components.MovingBackgroundView;
 import ru.samsung.gamestudio.components.TextView;
+import ru.samsung.gamestudio.managers.MemoryManager;
 
 public class SettingsScreen extends ScreenAdapter {
 
@@ -72,13 +73,13 @@ public class SettingsScreen extends ScreenAdapter {
                 clearSettingView.setText("clear records (cleared)");
             }
             if (musicSettingView.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
-                myGdxGame.audioManager.isMusicOn = !myGdxGame.audioManager.isMusicOn;
-                musicSettingView.setText("music: " + translateStateToText(myGdxGame.audioManager.isMusicOn));
+                MemoryManager.saveMusicSettings(!MemoryManager.loadIsMusicOn());
+                musicSettingView.setText("music: " + translateStateToText(MemoryManager.loadIsMusicOn()));
                 myGdxGame.audioManager.updateMusicFlag();
             }
             if (soundSettingView.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
-                myGdxGame.audioManager.isSoundOn = !myGdxGame.audioManager.isSoundOn;
-                soundSettingView.setText("sound: " + translateStateToText(myGdxGame.audioManager.isSoundOn));
+                MemoryManager.saveSoundSettings(!MemoryManager.loadIsSoundOn());
+                soundSettingView.setText("sound: " + translateStateToText(MemoryManager.loadIsSoundOn()));
             }
         }
     }
