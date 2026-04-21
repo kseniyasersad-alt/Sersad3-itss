@@ -13,9 +13,9 @@ public class TrashObject extends GameObject {
 
     public TrashObject(int width, int height, String texturePath, World world) {
         super(
-                width, height,
                 width / 2 + paddingHorizontal + (new Random()).nextInt((GameSettings.SCREEN_WIDTH - 2 * paddingHorizontal - width)),
                 GameSettings.SCREEN_HEIGHT + height / 2,
+                width, height,
                 GameSettings.TRASH_BIT,
                 texturePath,
                 world
