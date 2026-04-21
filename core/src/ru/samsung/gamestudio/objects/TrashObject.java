@@ -37,4 +37,5 @@ public class TrashObject extends GameObject {
     public void hit() {
         livesLeft -= 1;
     }
+
 }
