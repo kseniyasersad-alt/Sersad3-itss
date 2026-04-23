@@ -1,6 +1,10 @@
 package ru.samsung.gamestudio;
 
 import com.badlogic.gdx.utils.TimeUtils;
+import ru.samsung.gamestudio.managers.MemoryManager;
+
+import java.util.ArrayList;
+
 public class GameSession {
 
     public GameState state;
@@ -9,6 +13,7 @@ public class GameSession {
     int destructedTrashNumber;
 
     long nextTrashSpawnTime;
+    long nextCoinSpawnTime;
     long sessionStartTime;
     long pauseStartTime;
 
@@ -34,6 +39,21 @@ public class GameSession {
         sessionStartTime += TimeUtils.millis() - pauseStartTime;
     }
 
+    public void endGame() {
+        updateScore();
+        state = GameState.ENDED;
+        ArrayList<Integer> recordsTable = MemoryManager.loadRecordsTable();
+        if (recordsTable == null) {
+            recordsTable = new ArrayList<>();
+        }
+        int foundIdx = 0;
+        for (; foundIdx < recordsTable.size(); foundIdx++) {
+            if (recordsTable.get(foundIdx) < getScore()) break;
+        }
+        recordsTable.add(foundIdx, getScore());
+        MemoryManager.saveTableOfRecords(recordsTable);
+    }
+
     public void destructionRegistration() {
         destructedTrashNumber += 1;
     }
@@ -49,6 +69,14 @@ public class GameSession {
     public boolean shouldSpawnTrash() {
         if (nextTrashSpawnTime <= TimeUtils.millis()) {
             nextTrashSpawnTime = TimeUtils.millis() + (long) (GameSettings.STARTING_TRASH_APPEARANCE_COOL_DOWN
+                    * getTrashPeriodCoolDown());
+            return true;
+        }
+        return false;
+    }
+    public boolean shouldSpawnCoin() {
+        if (nextCoinSpawnTime <= TimeUtils.millis()) {
+            nextCoinSpawnTime = TimeUtils.millis() + (long) (GameSettings.STARTING_TRASH_APPEARANCE_COOL_DOWN
                     * getTrashPeriodCoolDown());
             return true;
         }

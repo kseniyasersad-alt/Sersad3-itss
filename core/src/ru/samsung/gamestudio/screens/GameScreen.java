@@ -8,13 +8,11 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import ru.samsung.gamestudio.*;
-import ru.samsung.gamestudio.components.ButtonView;
-import ru.samsung.gamestudio.components.TextView;
-import ru.samsung.gamestudio.components.ImageView;
-import ru.samsung.gamestudio.components.LiveView;
-import ru.samsung.gamestudio.components.MovingBackgroundView;
+import ru.samsung.gamestudio.components.*;
 import ru.samsung.gamestudio.managers.ContactManager;
+import ru.samsung.gamestudio.managers.MemoryManager;
 import ru.samsung.gamestudio.objects.BulletObject;
+import ru.samsung.gamestudio.objects.CoinObject;
 import ru.samsung.gamestudio.objects.ShipObject;
 import ru.samsung.gamestudio.objects.TrashObject;
 
@@ -27,23 +25,27 @@ public class GameScreen extends ScreenAdapter {
     ShipObject shipObject;
 
     ArrayList<TrashObject> trashArray;
+    ArrayList<CoinObject> coinArray;
     ArrayList<BulletObject> bulletArray;
 
     ContactManager contactManager;
 
+    //Game--playng
     MovingBackgroundView backgroundView;
     ImageView topBlackoutView;
     LiveView liveView;
     TextView scoreTextView;
     ButtonView pauseButton;
 
+    //Pause--game
     ImageView fullBlackoutView;
     TextView pauseTextView;
     ButtonView homeButton;
     ButtonView continueButton;
 
+    //Die--ship
     TextView recordsTextView;
-
+    RecordsListView recordsListView;
     ButtonView homeButton2;
 
     public GameScreen(MyGdxGame myGdxGame) {
@@ -53,6 +55,7 @@ public class GameScreen extends ScreenAdapter {
         contactManager = new ContactManager(myGdxGame.world);
 
         trashArray = new ArrayList<>();
+        coinArray = new ArrayList<>();
         bulletArray = new ArrayList<>();
 
         shipObject = new ShipObject(GameSettings.SCREEN_WIDTH / 2, 150, GameSettings.SHIP_WIDTH, GameSettings.SHIP_HEIGHT, GameResources.SHIP_IMG_PATH, myGdxGame.world);
@@ -67,6 +70,9 @@ public class GameScreen extends ScreenAdapter {
         pauseTextView = new TextView(myGdxGame.largeWhiteFont, 282, 842, "Pause");
         homeButton = new ButtonView(138, 695, 200, 70, myGdxGame.commonBlackFont, GameResources.BUTTON_SHORT_BG_IMG_PATH, "Home");
         continueButton = new ButtonView(393, 695, 200, 70, myGdxGame.commonBlackFont, GameResources.BUTTON_SHORT_BG_IMG_PATH, "Continue");
+        recordsListView = new RecordsListView(myGdxGame.commonWhiteFont, 690);
+        recordsTextView = new TextView(myGdxGame.largeWhiteFont, 206, 842, "Last records");
+        homeButton2 = new ButtonView(280, 365, 160, 70, myGdxGame.commonBlackFont, GameResources.BUTTON_SHORT_BG_IMG_PATH, "Home");
     }
 
     @Override
@@ -88,6 +94,11 @@ public class GameScreen extends ScreenAdapter {
                 trashArray.add(trashObject);
             }
 
+            if (gameSession.shouldSpawnCoin()) {
+                CoinObject coinObject = new CoinObject(60 , 60, GameResources.COIN_IMG_PATH, myGdxGame.world);
+                coinArray.add(coinObject);
+            }
+
             if (shipObject.needToShoot()) {
                 BulletObject laserBullet = new BulletObject(
                         shipObject.getX(), shipObject.getY() + shipObject.height / 2,
@@ -100,13 +111,16 @@ public class GameScreen extends ScreenAdapter {
             }
 
             if (!shipObject.isAlive()) {
-                System.out.println("Game over!");
+                gameSession.endGame();
+                recordsListView.setRecords(MemoryManager.loadRecordsTable());
             }
 
             updateTrash();
             updateBullets();
+            updateCoin();
             backgroundView.move();
-            scoreTextView.setText("Score: " + 100);
+            gameSession.updateScore();
+            scoreTextView.setText("Score: " + gameSession.getScore());
             liveView.setLeftLives(shipObject.getLiveLeft());
 
             myGdxGame.stepWorld();
@@ -118,6 +132,7 @@ public class GameScreen extends ScreenAdapter {
     private void handleInput() {
         if (Gdx.input.isTouched()) {
             myGdxGame.touch = myGdxGame.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+
             switch (gameSession.state) {
                 case PLAYING:
                     if (pauseButton.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
@@ -134,6 +149,13 @@ public class GameScreen extends ScreenAdapter {
                         myGdxGame.setScreen(myGdxGame.menuScreen);
                     }
                     break;
+
+                case ENDED:
+
+                    if (homeButton2.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
+                        myGdxGame.setScreen(myGdxGame.menuScreen);
+                    }
+                    break;
             }
         }
     }
@@ -146,6 +168,7 @@ public class GameScreen extends ScreenAdapter {
         myGdxGame.batch.begin();
         backgroundView.draw(myGdxGame.batch);
         for (TrashObject trash : trashArray) trash.draw(myGdxGame.batch);
+        for (CoinObject coin : coinArray) coin.draw(myGdxGame.batch);
         shipObject.draw(myGdxGame.batch);
         for (BulletObject bullet : bulletArray) bullet.draw(myGdxGame.batch);
         topBlackoutView.draw(myGdxGame.batch);
@@ -161,6 +184,7 @@ public class GameScreen extends ScreenAdapter {
         } else if (gameSession.state == GameState.ENDED) {
             fullBlackoutView.draw(myGdxGame.batch);
             recordsTextView.draw(myGdxGame.batch);
+            recordsListView.draw(myGdxGame.batch);
             homeButton2.draw(myGdxGame.batch);
         }
 
@@ -192,12 +216,24 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
+    private void updateCoin() {
+         for (int i = 0; i < coinArray.size(); i++) {
+             if (coinArray.get(i).hasToBeDestroyed()) {
+                 myGdxGame.world.destroyBody(coinArray.get(i).body);
+                 coinArray.remove(i--);
+             }
+         }
+    }
+
     private void restartGame() {
-
-
         for (int i = 0; i < trashArray.size(); i++) {
             myGdxGame.world.destroyBody(trashArray.get(i).body);
             trashArray.remove(i--);
+        }
+
+        for (int i = 0; i < coinArray.size(); i++) {
+            myGdxGame.world.destroyBody(coinArray.get(i).body);
+            coinArray.remove(i--);
         }
 
         if (shipObject != null) {
@@ -211,6 +247,8 @@ public class GameScreen extends ScreenAdapter {
     }
 
 }
+
+
 
 //     /\   /\           ___
 //    //\\_//\\       --|>_<|

@@ -13,6 +13,8 @@ import ru.samsung.gamestudio.components.MovingBackgroundView;
 import ru.samsung.gamestudio.components.TextView;
 import ru.samsung.gamestudio.managers.MemoryManager;
 
+import java.util.ArrayList;
+
 public class SettingsScreen extends ScreenAdapter {
 
     MyGdxGame myGdxGame;
@@ -31,7 +33,16 @@ public class SettingsScreen extends ScreenAdapter {
         backgroundView = new MovingBackgroundView(GameResources.BACKGROUND_IMG_PATH);
         titleTextView = new TextView(myGdxGame.largeWhiteFont, 256, 956, "Settings");
         blackoutImageView = new ImageView(85, 365, GameResources.BLACKOUT_MIDDLE_IMG_PATH);
-        musicSettingView = new TextView(myGdxGame.commonWhiteFont, 173, 717, "music: " + "ON");
+        if (MemoryManager.loadIsMusicOn() == true) {
+            musicSettingView = new TextView(myGdxGame.commonWhiteFont, 173, 717, "music: " + "ON");
+        } else {
+            musicSettingView = new TextView(myGdxGame.commonWhiteFont, 173, 717, "music: " + "OFF");
+        }
+        if (MemoryManager.loadIsSoundOn() == true) {
+            soundSettingView = new TextView(myGdxGame.commonWhiteFont, 173, 658, "sound: " + "ON");
+        } else {
+            soundSettingView = new TextView(myGdxGame.commonWhiteFont, 173, 658, "sound: " + "OFF");
+        }
         soundSettingView = new TextView(myGdxGame.commonWhiteFont, 173, 658, "sound: " + "ON");
         clearSettingView = new TextView(myGdxGame.commonWhiteFont, 173, 599, "clear records");
         returnButton = new ButtonView(280, 447, 160, 70, myGdxGame.commonBlackFont, GameResources.BUTTON_SHORT_BG_IMG_PATH, "return");
@@ -71,6 +82,7 @@ public class SettingsScreen extends ScreenAdapter {
             }
             if (clearSettingView.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
                 clearSettingView.setText("clear records (cleared)");
+                MemoryManager.saveTableOfRecords(new ArrayList<>());
             }
             if (musicSettingView.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
                 MemoryManager.saveMusicSettings(!MemoryManager.loadIsMusicOn());

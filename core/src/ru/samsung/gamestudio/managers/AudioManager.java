@@ -14,6 +14,17 @@ public class AudioManager {
     public Sound shootSound;
     public Sound explosionSound;
 
+    public void updateSoundFlag() {
+        isSoundOn = MemoryManager.loadIsSoundOn();
+    }
+
+    public void updateMusicFlag() {
+        isMusicOn = MemoryManager.loadIsMusicOn();
+
+        if (isMusicOn) backgroundMusic.play();
+        else backgroundMusic.stop();
+    }
+
     public AudioManager() {
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal(GameResources.BACKGROUND_MUSIC_PATH));
         shootSound = Gdx.audio.newSound(Gdx.files.internal(GameResources.SHOOT_SOUND_PATH));
@@ -26,14 +37,4 @@ public class AudioManager {
         updateMusicFlag();
     }
 
-    public void updateSoundFlag() {
-        isSoundOn = MemoryManager.loadIsSoundOn();
-    }
-
-    public void updateMusicFlag() {
-        isMusicOn = MemoryManager.loadIsMusicOn();
-
-        if (isMusicOn) backgroundMusic.play();
-        else backgroundMusic.stop();
-    }
 }
