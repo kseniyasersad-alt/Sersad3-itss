@@ -64,5 +64,4 @@ public class ShipObject extends GameObject {
         }
         return false;
     }
-
 }

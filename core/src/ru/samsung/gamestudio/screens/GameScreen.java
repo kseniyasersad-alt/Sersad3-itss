@@ -17,6 +17,9 @@ import ru.samsung.gamestudio.objects.ShipObject;
 import ru.samsung.gamestudio.objects.TrashObject;
 
 import java.util.ArrayList;
+import java.util.Random;
+
+import static ru.samsung.gamestudio.objects.CoinObject.paddingHorizontal;
 
 public class GameScreen extends ScreenAdapter {
 
@@ -95,7 +98,11 @@ public class GameScreen extends ScreenAdapter {
             }
 
             if (gameSession.shouldSpawnCoin()) {
-                CoinObject coinObject = new CoinObject(60 , 60, GameResources.COIN_IMG_PATH, myGdxGame.world);
+                CoinObject coinObject = new CoinObject(
+                        GameSettings.COIN_WIDTH, GameSettings.COIN_HEIGHT,
+                        GameResources.COIN_IMG_PATH,
+                        myGdxGame.world
+                );
                 coinArray.add(coinObject);
             }
 
@@ -218,6 +225,9 @@ public class GameScreen extends ScreenAdapter {
 
     private void updateCoin() {
          for (int i = 0; i < coinArray.size(); i++) {
+             if (coinArray.get(i).isAlive()) {
+                 gameSession.destructionRegistrationCoin();
+             }
              if (coinArray.get(i).hasToBeDestroyed()) {
                  myGdxGame.world.destroyBody(coinArray.get(i).body);
                  coinArray.remove(i--);
@@ -250,10 +260,10 @@ public class GameScreen extends ScreenAdapter {
 
 
 
-//     /\   /\           ___
-//    //\\_//\\       --|>_<|
-//   =|  0 - 0 |=  / \  \___/
-//     \ \ >\ \   /  /
+//     /\   /\            ___
+//    //\\_//\\        -<|>_<|
+//   =|  0 - 0 |=  / \
+//     \ \ >\  /  /  /
 //     /\> > >/| /  /
 //   _/  |  |  |/  /
 //  |_|__=|__-|=\ /

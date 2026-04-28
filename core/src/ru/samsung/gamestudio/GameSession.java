@@ -11,6 +11,8 @@ public class GameSession {
 
     private int score;
     int destructedTrashNumber;
+    int destructedCoinNumber;
+    int destructedNumber;
 
     long nextTrashSpawnTime;
     long nextCoinSpawnTime;
@@ -58,8 +60,12 @@ public class GameSession {
         destructedTrashNumber += 1;
     }
 
+    public void destructionRegistrationCoin() {
+        destructedCoinNumber += 1;
+    }
+
     public void updateScore() {
-        score = (int) (TimeUtils.millis() - sessionStartTime) / 100 + destructedTrashNumber * 100;
+        score = (int) (TimeUtils.millis() - sessionStartTime) / 100 + destructedTrashNumber * 200 ;
     }
 
     public int getScore() {
@@ -74,16 +80,20 @@ public class GameSession {
         }
         return false;
     }
+
     public boolean shouldSpawnCoin() {
         if (nextCoinSpawnTime <= TimeUtils.millis()) {
-            nextCoinSpawnTime = TimeUtils.millis() + (long) (GameSettings.STARTING_TRASH_APPEARANCE_COOL_DOWN
-                    * getTrashPeriodCoolDown());
+            nextCoinSpawnTime = TimeUtils.millis() + (long) (GameSettings.STARTING_COIN_APPEARANCE_COOL_DOWN
+                    * getCoinPeriodCoolDown());
             return true;
         }
         return false;
     }
 
     private float getTrashPeriodCoolDown() {
+        return (float) Math.exp(-0.001 * (TimeUtils.millis() - sessionStartTime + 1) / 1000);
+    }
+    private float getCoinPeriodCoolDown() {
         return (float) Math.exp(-0.001 * (TimeUtils.millis() - sessionStartTime + 1) / 1000);
     }
 }
